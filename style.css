@@ -127,8 +127,12 @@
 }
 
 .preview-view {
-	background: #fff;
-	color: #111;
+	background: var(--out-bg);
+	color: var(--out-fg);
+}
+
+.preview-view a {
+	color: var(--out-link);
 }
 
 .preview-view h1,
@@ -157,16 +161,37 @@
 
 .preview-view th,
 .preview-view td {
-	border: 1px solid #ccc;
+	border: 1px solid var(--border);
 	padding: 8px;
 }
 
 .preview-view blockquote {
-	border-left: 4px solid #ddd;
+	border-left: 4px solid var(--border);
 	margin-left: 0;
 	padding-left: 1rem;
 }
 
 .hidden {
-	display: none;
+	display: none !important;
+}
+
+/* Theme colors for the output panel (driven by html[data-theme], set in index.html/app.js) */
+:root,
+:root[data-theme="light"] {
+	color-scheme: light;
+	--out-bg: #ffffff;
+	--out-fg: #363636;
+	--out-link: #0076d1;
+}
+
+:root[data-theme="dark"] {
+	color-scheme: dark;
+	--out-bg: #161f27;
+	--out-fg: #dbdbdb;
+	--out-link: #41adff;
+}
+
+.source-view {
+	background: var(--out-bg);
+	color: var(--out-fg);
 }

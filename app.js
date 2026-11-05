@@ -83,12 +83,17 @@ function loadFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
+outputSource.addEventListener("input", () => {
+    currentOutput = outputSource.value;
+});
+
 function showSource() {
     outputSource.classList.remove("hidden");
     outputPreview.classList.add("hidden");
 }
 
 function showPreview() {
+    currentOutput = outputSource.value;
     outputPreview.classList.remove("hidden");
     outputSource.classList.add("hidden");
     renderPreview();
@@ -97,7 +102,7 @@ function showPreview() {
 function updateOutput(content, mode = "html") {
     currentOutput = content;
     currentMode = mode;
-    outputSource.textContent = content;
+    outputSource.value = content;
 
     if (!outputPreview.classList.contains("hidden")) {
         renderPreview();
@@ -138,14 +143,34 @@ async function processTdl(sefFile, mode) {
     }
 }
 
-function toggleTheme() {
-    const current = themeLink.href;
+const WATER_CSS_BASE = "https://cdn.jsdelivr.net/npm/water.css@2/out/";
 
-    if (current.includes("/dark.css")) {
-        themeLink.href =
-            "https://cdn.jsdelivr.net/npm/water.css@2/out/water.css";
-    } else {
-        themeLink.href =
-            "https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css";
+function getTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "light";
+}
+
+function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    themeLink.href = WATER_CSS_BASE + theme + ".css";
+
+    // Button shows the theme you will switch TO.
+    const btn = document.getElementById("theme-toggle");
+    btn.textContent = theme === "dark" ? "☀️" : "🌙";
+    btn.title = theme === "dark" ? "Switch to light theme" : "Switch to dark theme";
+}
+
+function toggleTheme() {
+    const next = getTheme() === "dark" ? "light" : "dark";
+    applyTheme(next);
+
+    try {
+        localStorage.setItem("tdl-theme", next);
+    } catch (e) {
+        // storage may be unavailable (privacy mode) – ignore
     }
 }
+
+// Sync button icon with the theme chosen by the inline script in <head>.
+applyTheme(getTheme());

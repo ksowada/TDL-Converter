@@ -6,10 +6,26 @@
 
     <title>TDL Conversion</title>
 
-    <!-- Water.css -->
+    <!-- Water.css (explicit light/dark; the href is set by the script below) -->
     <link id="water-theme"
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+          href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+
+    <script>
+        // Decide the theme before first paint: saved choice, else OS preference.
+        (function () {
+            var theme = null;
+            try { theme = localStorage.getItem("tdl-theme"); } catch (e) {}
+            if (theme !== "light" && theme !== "dark") {
+                theme = window.matchMedia &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches
+                    ? "dark" : "light";
+            }
+            document.documentElement.setAttribute("data-theme", theme);
+            document.getElementById("water-theme").href =
+                "https://cdn.jsdelivr.net/npm/water.css@2/out/" + theme + ".css";
+        })();
+    </script>
 
     <link rel="stylesheet" href="style.css">
 
@@ -35,7 +51,7 @@
     </div>
 
     <div class="header-right">
-        <button id="theme-toggle">🌙</button>
+        <button id="theme-toggle" type="button" aria-label="Toggle dark/light theme">🌙</button>
         <a href="legal-notice.html">Legal Notice</a>
         <a href="contact.html">Contact</a>
     </div>
@@ -94,7 +110,10 @@
 
             </div>
 
-            <pre id="outputSource" class="output-view source-view"></pre>
+            <textarea
+                id="outputSource"
+                class="output-view source-view"
+                spellcheck="false"></textarea>
 
             <div id="outputPreview" class="output-view preview-view hidden"></div>
 
