@@ -2,11 +2,13 @@
   "name": "tdl-converter",
   "private": true,
   "devDependencies": {
+    "http-server": "^14.1.1",
     "xslt3": "^2.7.0"
   },
   "scripts": {
     "build:html": "xslt3 -xsl:tdl2html.xsl -export:todo2html.sef.json -nogo",
     "build:md": "xslt3 -xsl:tdl2md.xsl -export:todo2md.sef.json -nogo",
-    "build": "npm run build:html && npm run build:md"
+    "build": "npm run build:html && npm run build:md",
+    "serve": "http-server . -p 8000"
   }
 }

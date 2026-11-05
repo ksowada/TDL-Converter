@@ -43,7 +43,10 @@ June 2103 (added coloured tasks, HTML comments, ability to handle CATEGORY, TAG,
 	Repeat the heading on each page.
 	Colouring due or overdue tasks.-->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+<xsl:stylesheet
+    version="3.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<xsl:strip-space elements="*"/>
 	
 	<xsl:output method="text" indent="yes" omit-xml-declaration="yes" />
@@ -201,8 +204,7 @@ June 2103 (added coloured tasks, HTML comments, ability to handle CATEGORY, TAG,
 			<!-- <xsl:variable name="titlePrefix" select="
 				string-join((for $i in 1 to (count(ancestor::TASK)+1) return '#'),'')"/> -->
 			<xsl:variable name="titlePrefix"
-select="string-join((1 to (count(ancestor::TASK)+1)) ! '#', '')"/>
-			
+    select="string-join((1 to xs:integer(count(ancestor::TASK)+1)) ! '#', '')"/>
             <!--Task title-->
 			<xsl:text>
 </xsl:text>		
