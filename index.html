@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="saxonjs3/SaxonJS3.rt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="app.js" defer></script>
 </head>
 <body>
@@ -74,13 +75,28 @@
 
         </div>
 
-        <div class="panel">
+        <div class="panel output-panel">
 
-            <h3>Output</h3>
+            <div class="panel-header">
 
-            <textarea
-                id="outputText"
-                spellcheck="false"></textarea>
+                <h3>Output</h3>
+
+                <div class="view-switch" role="radiogroup" aria-label="Output view">
+                    <label>
+                        <input type="radio" name="outputView" value="source" checked>
+                        Source
+                    </label>
+                    <label>
+                        <input type="radio" name="outputView" value="preview">
+                        Preview
+                    </label>
+                </div>
+
+            </div>
+
+            <pre id="outputSource" class="output-view source-view"></pre>
+
+            <div id="outputPreview" class="output-view preview-view hidden"></div>
 
         </div>
 

@@ -1,29 +1,39 @@
 const inputText = document.getElementById("inputText");
-const outputText = document.getElementById("outputText");
 const fileInput = document.getElementById("fileInput");
 const dropZone = document.getElementById("dropZone");
-
 const themeLink = document.getElementById("water-theme");
+const outputSource = document.getElementById("outputSource");
+const outputPreview = document.getElementById("outputPreview");
+
+let currentOutput = "";
+let currentMode = "html";
 
 document.getElementById("theme-toggle")
     .addEventListener("click", toggleTheme);
 
 document.getElementById("btn-html")
     .addEventListener("click", () => {
-        processTdl("todo2html.sef.json");
+        processTdl("todo2html.sef.json", "html");
     });
 
 document.getElementById("btn-md")
     .addEventListener("click", () => {
-        processTdl("todo2md.sef.json");
+        processTdl("todo2md.sef.json", "markdown");
     });
 
-fileInput.addEventListener(
-    "change",
-    handleFileSelect
-);
+document.querySelectorAll("input[name='outputView']").forEach((radio) => {
+    radio.addEventListener("change", () => {
+        if (radio.value === "preview") {
+            showPreview();
+        } else {
+            showSource();
+        }
+    });
+});
 
-dropZone.addEventListener("dragover", e => {
+fileInput.addEventListener("change", handleFileSelect);
+
+dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropZone.classList.add("dragover");
 });
@@ -32,77 +42,110 @@ dropZone.addEventListener("dragleave", () => {
     dropZone.classList.remove("dragover");
 });
 
-dropZone.addEventListener("drop", e => {
-
+dropZone.addEventListener("drop", (e) => {
     e.preventDefault();
-
     dropZone.classList.remove("dragover");
 
     const file = e.dataTransfer.files[0];
-
     if (file) {
         loadFile(file);
     }
 });
 
 function handleFileSelect(event) {
-
     const file = event.target.files[0];
-
     if (file) {
         loadFile(file);
     }
 }
 
-function loadFile(file) {
+function decodeTdlBytes(buffer) {
+    const bytes = new Uint8Array(buffer);
 
-    const reader = new FileReader();
+    if (bytes.length >= 2 && bytes[0] === 0xff && bytes[1] === 0xfe) {
+        return new TextDecoder("utf-16le").decode(bytes);
+    }
 
-    reader.onload = function() {
+    if (bytes.length >= 2 && bytes[0] === 0xfe && bytes[1] === 0xff) {
+        return new TextDecoder("utf-16be").decode(bytes);
+    }
 
-        inputText.value = reader.result;
-
-    };
-
-    reader.readAsText(file);
+    return new TextDecoder("utf-8").decode(bytes);
 }
 
-async function processTdl(sefFile) {
+function loadFile(file) {
+    const reader = new FileReader();
 
-    outputText.value = "Processing...";
+    reader.onload = function () {
+        inputText.value = decodeTdlBytes(reader.result);
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+function showSource() {
+    outputSource.classList.remove("hidden");
+    outputPreview.classList.add("hidden");
+}
+
+function showPreview() {
+    outputPreview.classList.remove("hidden");
+    outputSource.classList.add("hidden");
+    renderPreview();
+}
+
+function updateOutput(content, mode = "html") {
+    currentOutput = content;
+    currentMode = mode;
+    outputSource.textContent = content;
+
+    if (!outputPreview.classList.contains("hidden")) {
+        renderPreview();
+    }
+}
+
+function renderPreview() {
+    if (currentMode === "markdown") {
+        if (typeof marked !== "undefined") {
+            const html = typeof marked.parse === "function"
+                ? marked.parse(currentOutput)
+                : marked(currentOutput);
+            outputPreview.innerHTML = html;
+        } else {
+            outputPreview.innerHTML =
+                "<p><strong>marked.js was not loaded.</strong></p>";
+        }
+        return;
+    }
+
+    outputPreview.innerHTML = currentOutput;
+}
+
+async function processTdl(sefFile, mode) {
+    updateOutput("Processing...", mode);
 
     try {
-
         const result = await SaxonJS.transform({
             stylesheetLocation: sefFile,
             sourceText: inputText.value,
             destination: "serialized"
-        });
+        }, "async");
 
-        outputText.value =
-            result.principalResult;
-
+        updateOutput(result.principalResult || "", mode);
     } catch (err) {
-
-        outputText.value =
-            "ERROR\n\n" + err.message;
-
+        updateOutput("ERROR\n\n" + err.message, mode);
         console.error(err);
     }
 }
 
 function toggleTheme() {
-
     const current = themeLink.href;
 
-    if (current.includes("water.css")) {
-
-        themeLink.href =
-            "https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css";
-
-    } else {
-
+    if (current.includes("/dark.css")) {
         themeLink.href =
             "https://cdn.jsdelivr.net/npm/water.css@2/out/water.css";
+    } else {
+        themeLink.href =
+            "https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css";
     }
 }
