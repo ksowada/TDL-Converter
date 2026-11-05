@@ -1,15 +1,48 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>TDL Conversion</title>
+    <!-- SEO -->
+    <title>ToDoList TDL Converter – Convert .tdl to HTML &amp; Markdown online</title>
+    <meta name="description" content="Free online converter for AbstractSpoon ToDoList .tdl files. Convert your task hierarchy with comments and links to clean HTML or Markdown – directly in your browser, no upload.">
+    <meta name="keywords" content="ToDoList TDL Converter, ToDoList, AbstractSpoon, tdl to html, tdl to markdown, tdl2md, tdl2html, XSLT, SaxonJS">
+    <meta name="author" content="Karl Sowada">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ardoid.eu/tdlconverter/">
 
-    <!-- Water.css (explicit light/dark; the href is set by the script below) -->
-    <link id="water-theme"
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+    <!-- Open Graph / social preview -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="ardoid.eu">
+    <meta property="og:title" content="ToDoList TDL Converter – .tdl to HTML &amp; Markdown">
+    <meta property="og:description" content="Convert AbstractSpoon ToDoList .tdl files to HTML or Markdown in your browser. Hierarchy, comments and links are kept.">
+    <meta property="og:url" content="https://ardoid.eu/tdlconverter/">
+    <meta property="og:image" content="https://ardoid.eu/tdlconverter/TDL-Converter.splash.webp">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="theme-color" content="#4caf50">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "ToDoList TDL Converter",
+        "url": "https://ardoid.eu/tdlconverter/",
+        "description": "Converts AbstractSpoon ToDoList .tdl files to HTML or Markdown in the browser using XSLT (SaxonJS).",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires JavaScript",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "author": { "@type": "Person", "name": "Karl Sowada", "url": "https://ardoid.eu" }
+    }
+    </script>
+
+    <!-- Water.css (explicit light/dark; href set dynamically) -->
+    <link id="water-theme" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
 
     <script>
         // Decide the theme before first paint: saved choice, else OS preference.
@@ -29,94 +62,139 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <script src="saxonjs3/SaxonJS3.rt.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="saxonjs3/SaxonJS3.rt.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
     <script src="app.js" defer></script>
 </head>
-<body>
+<body id="app-body">
 
 <header class="site-header">
+    <a class="brand" href="./" aria-label="ToDoList TDL Converter home">
+        <img src="logo.webp" alt="ToDoList TDL Converter" class="logo" height="38">
+        <span class="brand-text">
+            <span class="brand-title">ToDoList TDL Converter</span>
+            <span class="brand-sub">TDL → HTML &amp; Markdown</span>
+        </span>
+    </a>
 
-    <div class="header-left">
-        <a href="https://ardoid.eu">← ardoid.eu</a>
-    </div>
-
-    <div class="header-center">
-        <h1>
-            <img src="logo.svg"
-                 alt="TDL Logo"
-                 class="logo">
-            TDL Conversion
-        </h1>
-    </div>
-
-    <div class="header-right">
-        <button id="theme-toggle" type="button" aria-label="Toggle dark/light theme">🌙</button>
-        <a href="legal-notice.html">Legal Notice</a>
-        <a href="contact.html">Contact</a>
-    </div>
-
+    <nav class="site-nav" aria-label="Main navigation">
+        <a href="https://ardoid.eu">ardoid.eu</a>
+        <a href="https://ardoid.eu/legal-notice.html">Legal Notice</a>
+        <a href="https://ardoid.eu/contact.html">Contact</a>
+        <button id="theme-toggle" class="icon-btn" type="button"
+                aria-label="Toggle dark/light theme" title="Toggle dark/light theme">🌙</button>
+    </nav>
 </header>
 
-<main>
+<main class="app">
 
-    <div class="toolbar">
-        <button id="btn-html">
-            TDL2HTML
-        </button>
+    <section class="intro" aria-labelledby="intro-title">
+        <h1 id="intro-title">ToDoList TDL Converter</h1>
+        <p>
+            Convert <a href="https://www.abstractspoon.com/" rel="noopener" target="_blank">AbstractSpoon ToDoList</a>
+            <code>.tdl</code> XML task files into clean <strong>HTML lists</strong> or <strong>Markdown outlines</strong>
+            while preserving task hierarchy, comments, and links.
+            Runs 100% locally in your browser (XSLT via SaxonJS) — <strong>files are never uploaded</strong>.
+        </p>
+        <noscript>
+            <p class="noscript">This converter needs JavaScript – the conversion runs locally in your browser.</p>
+        </noscript>
+    </section>
 
-        <button id="btn-md">
-            TDL2MD
-        </button>
+    <!-- Unified Convenient Toolbar -->
+    <div class="toolbar" role="toolbar" aria-label="Converter controls">
 
-        <input
-            type="file"
-            id="fileInput"
-            accept=".tdl,.xml">
-    </div>
+        <!-- Input controls -->
+        <div class="toolbar-section toolbar-input">
+            <label class="btn btn-file" for="fileInput" title="Open a .tdl or .xml file from your computer">
+                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                <span>Open .tdl</span>
+            </label>
+            <input type="file" id="fileInput" accept=".tdl,.xml" class="visually-hidden">
 
-    <div id="dropZone">
-        Drag & Drop TDL File Here
-    </div>
+            <button id="btn-clear" type="button" class="btn btn-secondary" title="Clear input text">
+                <svg class="btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                <span>Clear</span>
+            </button>
 
-    <section class="workspace">
-
-        <div class="panel">
-
-            <h3>Input</h3>
-
-            <textarea
-                id="inputText"
-                spellcheck="false"></textarea>
-
+            <span id="fileName" class="file-name-tag" title="Loaded file name or drop hint">or drop file here</span>
         </div>
 
-        <div class="panel output-panel">
+        <!-- Conversion controls -->
+        <div class="toolbar-section toolbar-convert">
+            <span class="toolbar-label">Convert to:</span>
+            <button id="btn-html" type="button" class="btn btn-primary" title="Convert TDL to structured HTML">
+                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                <span>HTML</span>
+            </button>
+            <button id="btn-md" type="button" class="btn btn-primary" title="Convert TDL to Markdown outline">
+                <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"></rect><polyline points="7 15 7 9 10 12 13 9 13 15"></polyline><polyline points="17 9 17 15"></polyline></svg>
+                <span>Markdown</span>
+            </button>
+            <span id="status" class="status-pill" role="status">Ready</span>
+        </div>
 
-            <div class="panel-header">
-
-                <h3>Output</h3>
-
-                <div class="view-switch" role="radiogroup" aria-label="Output view">
-                    <label>
-                        <input type="radio" name="outputView" value="source" checked>
+        <!-- Output controls -->
+        <div class="toolbar-section toolbar-output">
+            <div class="segmented" role="radiogroup" aria-label="Output view mode">
+                <label title="Show raw editable source code">
+                    <input type="radio" name="outputView" value="source" checked>
+                    <span>
+                        <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
                         Source
-                    </label>
-                    <label>
-                        <input type="radio" name="outputView" value="preview">
+                    </span>
+                </label>
+                <label title="Show formatted visual preview">
+                    <input type="radio" name="outputView" value="preview">
+                    <span>
+                        <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                         Preview
-                    </label>
-                </div>
-
+                    </span>
+                </label>
             </div>
 
-            <textarea
-                id="outputSource"
-                class="output-view source-view"
-                spellcheck="false"></textarea>
+            <button id="btn-copy" type="button" class="btn btn-secondary" title="Copy output text to clipboard">
+                <svg class="btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                <span>Copy</span>
+            </button>
 
-            <div id="outputPreview" class="output-view preview-view hidden"></div>
+            <button id="btn-download" type="button" class="btn btn-secondary" title="Download output file to disk">
+                <svg class="btn-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Download</span>
+            </button>
+        </div>
 
+    </div>
+
+    <!-- Workspace: 2 Panes filling 100% remaining viewport height -->
+    <section class="workspace" aria-label="Converter workspace">
+
+        <div class="panel" id="dropZone">
+            <div class="panel-header">
+                <h2>Input <span class="muted">(.tdl / XML)</span></h2>
+            </div>
+
+            <textarea id="inputText"
+                      class="pane"
+                      spellcheck="false"
+                      aria-label="TDL Input"
+                      placeholder="Paste the content of a .tdl file here, open a file above, or drag &amp; drop it onto this area."></textarea>
+
+            <div class="drop-overlay" aria-hidden="true">Drop .tdl file here</div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Output <span id="outputMode" class="badge"></span></h2>
+            </div>
+
+            <textarea id="outputSource"
+                      class="pane source-view"
+                      spellcheck="false"
+                      aria-label="Converted output (editable)"
+                      placeholder="The converted result will appear here. You can edit the text directly before copying or downloading."></textarea>
+
+            <div id="outputPreview" class="pane preview-view hidden" aria-live="polite"></div>
         </div>
 
     </section>

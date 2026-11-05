@@ -4,7 +4,9 @@
 				indent="yes"
 				encoding="UTF-8"/>
 	<xsl:template match="/">
-		<xsl:apply-templates/>
+		<ul>
+			<xsl:apply-templates/>
+		</ul>
 	</xsl:template>
 
 	<xsl:template match="TASK">

@@ -5,3 +5,4 @@ output.md
 node_modules/
 *.sef.json
 docs/
+dist/

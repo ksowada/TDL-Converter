@@ -208,8 +208,8 @@ June 2103 (added coloured tasks, HTML comments, ability to handle CATEGORY, TAG,
             <!--Task title-->
 			<xsl:text>
 </xsl:text>		
-			<xsl:value-of select="$titlePrefix"/><xsl:value-of select="@TITLE"/>
-			<xsl:text>&#160; &#160;</xsl:text> <!-- &nbsp;-->
+			<xsl:value-of select="$titlePrefix"/><xsl:text>&#160;</xsl:text><xsl:value-of select="@TITLE"/>
+			<xsl:text>&#10;</xsl:text> <!-- \n -->
 
             <!--Additional information to the task title-->
 <!--			<xsl:element name="span">-->
