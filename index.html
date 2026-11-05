@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TDL Conversion</title>
+
+    <!-- Water.css -->
+    <link id="water-theme"
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="saxon/SaxonJS2.rt.js"></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+
+    <div class="header-left">
+        <a href="https://ardoid.eu">← ardoid.eu</a>
+    </div>
+
+    <div class="header-center">
+        <h1>
+            <img src="logo.svg"
+                 alt="TDL Logo"
+                 class="logo">
+            TDL Conversion
+        </h1>
+    </div>
+
+    <div class="header-right">
+        <button id="theme-toggle">🌙</button>
+        <a href="legal-notice.html">Legal Notice</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+</header>
+
+<main>
+
+    <div class="toolbar">
+        <button id="btn-html">
+            TDL2HTML
+        </button>
+
+        <button id="btn-md">
+            TDL2MD
+        </button>
+
+        <input
+            type="file"
+            id="fileInput"
+            accept=".tdl,.xml">
+    </div>
+
+    <div id="dropZone">
+        Drag & Drop TDL File Here
+    </div>
+
+    <section class="workspace">
+
+        <div class="panel">
+
+            <h3>Input</h3>
+
+            <textarea
+                id="inputText"
+                spellcheck="false"></textarea>
+
+        </div>
+
+        <div class="panel">
+
+            <h3>Output</h3>
+
+            <textarea
+                id="outputText"
+                spellcheck="false"></textarea>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+</html>
