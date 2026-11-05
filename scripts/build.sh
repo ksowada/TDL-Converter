@@ -14,7 +14,7 @@ npx xslt3 -xsl:tdl2md.xsl   -export:todo2md.sef.json   -nogo
 echo "▶ Assembling dist/"
 rm -rf dist
 mkdir -p dist/saxonjs3
-cp index.html app.js style.css logo.webp TDL-Converter.splash.webp todo2html.sef.json todo2md.sef.json LICENSE.md dist/
+cp index.html app.js style.css favicon.png logo.webp apple-touch-icon.png TDL-Converter.splash.webp todo2html.sef.json todo2md.sef.json LICENSE.md dist/
 cp saxonjs3/SaxonJS3.rt.js saxonjs3/LICENSE.txt dist/saxonjs3/
 
 echo "✔ Build finished:"

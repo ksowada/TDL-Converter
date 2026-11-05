@@ -108,8 +108,10 @@ function loadFile(file) {
     reader.onload = function () {
         inputText.value = decodeTdlBytes(reader.result);
         baseFileName = file.name.replace(/\.[^.]+$/, "") || "todolist";
-        fileNameEl.textContent = file.name;
-        fileNameEl.title = `${file.name} (${formatBytes(file.size)})`;
+        if (fileNameEl) {
+            fileNameEl.textContent = `(${file.name})`;
+            fileNameEl.title = `${file.name} (${formatBytes(file.size)})`;
+        }
         setStatus(`Loaded ${file.name} (${formatBytes(file.size)})`, false, true);
     };
 
@@ -123,8 +125,10 @@ function loadFile(file) {
 function clearInput() {
     inputText.value = "";
     fileInput.value = "";
-    fileNameEl.textContent = "or drop file here";
-    fileNameEl.title = "Loaded file name or drop hint";
+    if (fileNameEl) {
+        fileNameEl.textContent = "(.tdl / XML)";
+        fileNameEl.title = "";
+    }
     baseFileName = "todolist";
     setStatus("Input cleared");
     inputText.focus();
@@ -254,9 +258,11 @@ async function processTdl(mode) {
 /* ---- Status & Utilities ------------------------------------------------- */
 
 function setStatus(message, isError = false, isSuccess = false) {
-    statusEl.textContent = message;
-    statusEl.classList.toggle("error", isError);
-    statusEl.classList.toggle("success", isSuccess);
+    if (statusEl) {
+        statusEl.textContent = message;
+        statusEl.classList.toggle("error", isError);
+        statusEl.classList.toggle("success", isSuccess);
+    }
 }
 
 function formatBytes(n) {

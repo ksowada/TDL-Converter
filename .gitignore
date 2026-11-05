@@ -6,3 +6,4 @@ node_modules/
 *.sef.json
 docs/
 dist/
+rsync.sh
