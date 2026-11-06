@@ -1,0 +1,19 @@
+name: Feature request
+description: Suggest an idea or enhancement for TDL Converter
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: Is your feature request related to a problem or a specific TDL attribute/feature?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you would like to happen or how the output should look.
+    validations:
+      required: true

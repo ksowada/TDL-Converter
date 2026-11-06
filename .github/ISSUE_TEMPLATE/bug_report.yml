@@ -1,0 +1,29 @@
+name: Bug report
+description: Create a report to help us improve TDL Converter
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting an issue!
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce this? (e.g. sample task XML snippet or steps)
+    validations:
+      required: false
+  - type: input
+    id: environment
+    attributes:
+      label: Browser / Environment
+      description: e.g. Firefox 120 on Linux, Chrome 122 on Windows, or CLI Saxon-HE
+    validations:
+      required: false

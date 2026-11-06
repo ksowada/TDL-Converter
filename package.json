@@ -1,8 +1,21 @@
 {
   "name": "tdl-converter",
-  "private": true,
-  "description": "Online converter for AbstractSpoon ToDoList .tdl files to HTML and Markdown (SaxonJS)",
+  "version": "1.0.0",
+  "description": "Online and CLI converter for AbstractSpoon ToDoList .tdl files to HTML and Markdown (SaxonJS & XSLT)",
   "homepage": "https://ardoid.eu/tdlconverter/",
+  "author": "Karl Sowada <karl@sowada.eu> (https://ardoid.eu)",
+  "license": "MIT",
+  "keywords": [
+    "todolist",
+    "tdl",
+    "abstractspoon",
+    "xslt",
+    "xslt3",
+    "saxonjs",
+    "markdown",
+    "html",
+    "converter"
+  ],
   "devDependencies": {
     "http-server": "^14.1.1",
     "xslt3": "^2.7.0"
@@ -12,7 +25,6 @@
     "build:md": "xslt3 -xsl:tdl2md.xsl -export:todo2md.sef.json -nogo",
     "build": "bash scripts/build.sh",
     "serve": "http-server . -p 8000 -c-1",
-    "serve:dist": "http-server dist -p 8000 -c-1",
-    "deploy": "bash scripts/deploy.sh"
+    "serve:dist": "http-server dist -p 8000 -c-1"
   }
 }
